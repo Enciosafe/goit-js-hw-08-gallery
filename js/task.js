@@ -1,5 +1,7 @@
 import gallery from '/js/gallery-items.js';
 const galleryRef = document.querySelector('.js-gallery');
+const modal = document.querySelector('.js-lightbox');
+const modalImg = document.querySelector('.lightbox__image');
 
 //----------------------- 1 вариант рендеринга (небезопасный, но простой)----
 
@@ -26,7 +28,7 @@ const fullGallery = ({ original, preview, description }) => {
   itemA.className = 'gallery__link';
   itemA.href = original;
   itemImg.src = preview;
-  itemImg.dataSource = original;
+  itemImg.setAttribute('data-source', original);
   itemImg.alt = description;
 
   itemA.appendChild(itemImg);
@@ -41,3 +43,44 @@ const renderGallery = galleryList => {
 };
 
 renderGallery(gallery);
+
+galleryRef.addEventListener('click', onImgClick);
+
+function onImgClick(e) {
+  e.preventDefault();
+  if (e.target.nodeName === 'IMG') {
+    modal.classList.add('is-open');
+    modalImg.src = e.target.dataset.source;
+  }
+}
+
+modal.addEventListener('click', onBtnClick);
+
+function onBtnClick(e) {
+  if (e.target.nodeName === 'BUTTON' || e.target.nodeName !== 'IMG') {
+    modal.classList.remove('is-open');
+    modalImg.src = '';
+  }
+}
+
+window.addEventListener('keydown', onEscKeyDown);
+
+function onEscKeyDown(e) {
+  if (modal.classList.contains('is-open') && e.code === 'Escape') {
+    modal.classList.remove('is-open');
+    modalImg.src = '';
+  }
+}
+
+console.dir(galleryRef);
+
+window.addEventListener('keydown', onRightKey);
+
+function onRightKey(e) {
+  if (e.code === '&larr') {
+    for (let i = 0; i < galleryRef.childElementCount; i += 1) {
+      galleryRef.childNodes[i] + 1;
+    }
+  }
+  return galleryRef;
+}

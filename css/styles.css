@@ -83,7 +83,6 @@ body {
   opacity: 1;
   pointer-events: initial;
 }
-
 .lightbox__overlay {
   position: absolute;
   top: 0;
