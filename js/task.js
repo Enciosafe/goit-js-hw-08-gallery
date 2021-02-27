@@ -45,12 +45,14 @@ const renderGallery = galleryList => {
 renderGallery(gallery);
 
 galleryRef.addEventListener('click', onImgClick);
+let currentIndex = 0;
 
 function onImgClick(e) {
   e.preventDefault();
   if (e.target.nodeName === 'IMG') {
     modal.classList.add('is-open');
     modalImg.src = e.target.dataset.source;
+    currentIndex = imgArray.indexOf(modalImg.src);
   }
 }
 
@@ -72,15 +74,25 @@ function onEscKeyDown(e) {
   }
 }
 
-console.dir(galleryRef);
+window.addEventListener('keydown', onArrowsPush);
 
-window.addEventListener('keydown', onRightKey);
+const imgArray = gallery.map(item => item.original);
 
-function onRightKey(e) {
-  if (e.code === '&larr') {
-    for (let i = 0; i < galleryRef.childElementCount; i += 1) {
-      galleryRef.childNodes[i] + 1;
+function onArrowsPush(e) {
+  if (e.code === 'ArrowRight') {
+    if (currentIndex === 8) {
+      currentIndex = 0;
+    } else {
+      currentIndex += 1;
     }
+    modalImg.src = imgArray[currentIndex];
   }
-  return galleryRef;
+  if (e.code === 'ArrowLeft') {
+    if (currentIndex === 0) {
+      currentIndex = imgArray.length - 1;
+    } else {
+      currentIndex -= 1;
+    }
+    modalImg.src = imgArray[currentIndex];
+  }
 }
